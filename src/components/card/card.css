@@ -1,0 +1,19 @@
+.card {
+  width: 16%;
+  height: 20vh;
+  margin: 3px auto;
+  border: 3px solid #000;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__num {
+  display: none;
+  font-size: 40px;
+}
+
+.card__num--show {
+  display: block;
+}

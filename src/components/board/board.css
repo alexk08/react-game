@@ -1,0 +1,22 @@
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 900px;
+  position: relative;
+}
+
+.board__message {
+  display: none;
+
+  font-size: 60px;
+  color: red;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.board__message--show {
+  display: block;
+}
