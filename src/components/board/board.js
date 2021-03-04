@@ -11,7 +11,7 @@ export default class Board extends Component {
   shuffleArr(arr) {
     return arr.sort(() => Math.random() - 0.5);
   }
- 
+
   createData() {
     let arr = [];
     let maxId = 100;
@@ -22,15 +22,16 @@ export default class Board extends Component {
         isOpened: false,
         isGuessed: false,
         isNotGuessed: false,
-        pause: false
+        pause: false,
+        imageSrc: `./images/${i + 1}.jpg`
       };
       arr = [ ...arr, el, el]; 
     }
 
-    arr = arr.map((el) => {
+    arr = arr.map((el, idx) => {
       return {
         ...el,
-        id: maxId++
+        id: maxId++,
       }
     })
 
@@ -89,7 +90,7 @@ export default class Board extends Component {
           data
         }
       })
-    }, 500);
+    }, 1000);
   }
 
   isWin(data) {
@@ -108,10 +109,11 @@ export default class Board extends Component {
     const { data } = this.state;
     const clazz = this.isWin(data) ? 'board__message--show' : '';
 
-    const cards =  data.map(({text, id, isOpened }) => <Card text={text} 
+    const cards =  data.map(({text, id, isOpened, imageSrc }) => <Card text={text} 
                                        key={id}
                                        id={id}
                                        isOpened={isOpened}
+                                       imageSrc={imageSrc}
                                        openCard={this.openCard}/>);
     return (
       <div className="board">

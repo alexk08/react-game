@@ -9,17 +9,29 @@ export default class Card extends Component {
     this.props.openCard(id);
   }
 
-  render() {
-    const {text, isOpened, id} = this.props;
+  // createImage(src) {
+  //   const image = new Image();
+  //   image.src = src;
 
-    const clazz = isOpened ? 'card__num--show' : ''; 
+  //   return image;
+  // }
+
+  render() {
+    const {text, isOpened, id, imageSrc} = this.props;
+
+    const clazz = isOpened ? 'card--rotate' : ''; 
 
     return (
-      <div className="card" 
-           id={id} 
-           onClick={this.onCardClick}>
-        <div className={`card__num ${clazz}`}>
-          {text}
+      <div className={`card ${clazz}`} >
+        <div className="card__container">
+          <div className="card__face"
+               id={id} 
+               onClick={this.onCardClick}
+               data-id={text}>
+          </div>
+          <div className="card__face card__face--back">
+            <img width="200" height="300" src={imageSrc} alt="something"/>
+          </div>
         </div>
       </div>
     )
