@@ -1,0 +1,18 @@
+.settings {
+  display: none;
+  width: 600px;
+  height: 400px;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+
+  border-radius: 15px;
+  background-color: #fff;
+}
+
+.settings--show {
+  display: block;
+}
