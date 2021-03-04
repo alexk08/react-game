@@ -2,11 +2,16 @@ import React, {Component} from 'react';
 import './card.css';
 
 export default class Card extends Component {
-  onCardClick = ({target}) => {
+
+  onCardClick = ({target}, addMove) => {
     const id = target.id;
 
     if (!id) return;
     this.props.openCard(id);
+
+    if (this.props.clickCounter % 2 === 1) { 
+      addMove();
+    }
   }
 
   // createImage(src) {
@@ -17,7 +22,7 @@ export default class Card extends Component {
   // }
 
   render() {
-    const {text, isOpened, id, imageSrc} = this.props;
+    const {text, isOpened, id, imageSrc, addMove } = this.props;
 
     const clazz = isOpened ? 'card--rotate' : ''; 
 
@@ -26,7 +31,7 @@ export default class Card extends Component {
         <div className="card__container">
           <div className="card__face"
                id={id} 
-               onClick={this.onCardClick}
+               onClick={(e) => this.onCardClick(e, addMove)}
                data-id={text}>
           </div>
           <div className="card__face card__face--back">

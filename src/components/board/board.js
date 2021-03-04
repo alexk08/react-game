@@ -5,7 +5,8 @@ import './board.css';
 
 export default class Board extends Component {
   state = {
-    data: this.shuffleArr(this.createData())
+    data: this.shuffleArr(this.createData()),
+    clickCounter: 0
   }
 
   shuffleArr(arr) {
@@ -39,7 +40,7 @@ export default class Board extends Component {
   }
 
   openCard = (idx) => {
-    this.setState(({data}) => {
+    this.setState(({data, clickCounter }) => {
       const clickedCard = data.find(({id}) => id === +idx);
 
       if (clickedCard.isGuessed || clickedCard.isOpened 
@@ -48,11 +49,12 @@ export default class Board extends Component {
       
       const openedCard = data.find(({isOpened, isGuessed}) => 
                          isOpened && !isGuessed);
-
+      
       if (!openedCard) {
         clickedCard.isOpened = true;
         return {
-          data: data
+          data,
+          clickCounter: ++clickCounter
         }
       }
 
@@ -69,7 +71,8 @@ export default class Board extends Component {
       }
 
       return {
-        data
+        data,
+        clickCounter: ++clickCounter
       }
     })
   }
@@ -106,7 +109,9 @@ export default class Board extends Component {
   }
 
   render() {
-    const { data } = this.state;
+    const { data, clickCounter } = this.state;
+    const { addMove } = this.props;
+
     const clazz = this.isWin(data) ? 'board__message--show' : '';
 
     const cards =  data.map(({text, id, isOpened, imageSrc }) => <Card text={text} 
@@ -114,7 +119,9 @@ export default class Board extends Component {
                                        id={id}
                                        isOpened={isOpened}
                                        imageSrc={imageSrc}
-                                       openCard={this.openCard}/>);
+                                       openCard={this.openCard}
+                                       addMove={addMove}
+                                       clickCounter={clickCounter}/>);
     return (
       <div className="board">
         <div className={`board__message ${clazz}`}>
