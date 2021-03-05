@@ -10,13 +10,14 @@ import './game.css';
 export default class Game extends Component {
   
   state = {
+    // cardsAmount: 18,
     data: this.shuffleArr(this.createData()),
     clickCounter: 0,
     movesCounter: 0,
     isWin: false,
     cardBack: './images/card-back-red.png',
     isSettingsOpen: false,
-    isGameStart: false
+    isGameStart: false,
   }
 
   shuffleArr(arr) {
@@ -26,6 +27,7 @@ export default class Game extends Component {
   createData() {
     let arr = [];
     let maxId = 100;
+    // const {cardsAmount} = this.state;
 
     for (let i = 0; i < 9; i++) {
       const el = {
@@ -115,19 +117,16 @@ export default class Game extends Component {
   }
 
   isWin() {
-    this.setState(({ data, isGameStart }) => {
+    this.setState(({ data }) => {
       
-      let result = true;
+      const openedCard = data.findIndex(({isOpened}) => !isOpened);
+      const isWin = openedCard === -1;
 
-      data.forEach((card) => {
-        if (!card.isOpened) {
-          result = false;
+      if (isWin) { 
+        return {
+          isWin,
+          isGameStart: !isWin 
         }
-      });
-
-      return {
-        isWin: result,
-        isGameStart: !result ? true : false 
       }
     })
   }
@@ -162,25 +161,48 @@ export default class Game extends Component {
   }
 
   startGame = () => {
-    console.log('start game')
-    this.setState(({ data, isGameStart, isWin, movesCounter, clickCounter }) => {
-      
-      return {
+    const {data} = this.state;
+    const openedCard = data.findIndex(({isOpened}) => isOpened);
+    
+    if (openedCard > -1) {
+      this.setState({
         isWin: false,
-        isGameStart: true,
         movesCounter: 0,
-        clickCounter: 0,
-        data: this.shuffleArr(this.createData())
-      }
-    });
+        clickCounter: 0
+      });
+      setTimeout(() => this.closeCards(), 0);
 
-    this.showCards();
+      setTimeout(() => {
+          this.setState({
+            data: this.shuffleArr(this.createData())
+          });
+      }, 1000);
+      
+      setTimeout(() => this.showCards(), 2000);
+      setTimeout(() => {
+        this.closeCards()
+        this.setState({isGameStart: true})
+      }, 5000);
+
+      return
+    } 
+
+    this.setState({
+      isWin: false,
+      movesCounter: 0,
+      clickCounter: 0,
+      data: this.shuffleArr(this.createData())
+    });
+    setTimeout(() => this.showCards(), 0);
+    setTimeout(() => {
+      this.closeCards()
+      this.setState({isGameStart: true})
+    }, 3000);
   }
 
   showCards() {
     this.setState(({ data }) => {
-
-      const openedData = data.map((card) => {
+      const newData = data.map((card) => {
         return {
           ...card,
           isOpened: true
@@ -188,16 +210,14 @@ export default class Game extends Component {
       })
 
       return {
-        data: openedData
+        data: newData
       }
     })
-
-    setTimeout(() => this.closeCards(), 2000);
   }
 
-  closeCards = () => {
+  closeCards() {
     this.setState(({ data }) => {
-      const closedData = data.map((card) => {
+      const newData = data.map((card) => {
         return {
           ...card,
           isOpened: false
@@ -205,7 +225,7 @@ export default class Game extends Component {
       })
 
       return {
-        data: closedData
+        data: newData
       }
     })
   }
