@@ -5,50 +5,33 @@ import Footer from '../footer';
 import Settings from '../settings';
 import Overlay from '../overlay';
 
+import shuffleArr from './methods/shuffleArr';
+import createData from './methods/createData';
+
 import './game.css';
 
 export default class Game extends Component {
-  
-  state = {
-    // cardsAmount: 18,
-    data: this.shuffleArr(this.createData()),
-    clickCounter: 0,
-    movesCounter: 0,
-    isWin: false,
-    cardBack: './images/card-back-red.png',
-    isSettingsOpen: false,
-    isGameStart: false,
-  }
-
-  shuffleArr(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-  }
-
-  createData() {
-    let arr = [];
-    let maxId = 100;
-    // const {cardsAmount} = this.state;
-
-    for (let i = 0; i < 9; i++) {
-      const el = {
-        text: `${i+1}`,
-        isOpened: false,
-        isGuessed: false,
-        isNotGuessed: false,
-        pause: false,
-        imageSrc: `./images/${i + 1}.jpg`
-      };
-      arr = [ ...arr, el, el]; 
-    }
-
-    arr = arr.map((el, idx) => {
-      return {
-        ...el,
-        id: maxId++,
+  constructor() {
+    super();
+    this.startBoardSize = 18;
+    this.startSettings = {cardBack: 'red', boardSize: 18}
+    
+    this.state = {
+      data: shuffleArr(createData(this.startSettings.boardSize)),
+      clickCounter: 0,
+      movesCounter: 0,
+      isWin: false,
+      isSettingsOpen: false,
+      isGameStart: false,
+      choosenSettings: {
+        cardBack: this.startSettings.cardBack, 
+        boardSize: this.startSettings.boardSize
+      },
+      savedSettings: {
+        cardBack: this.startSettings.cardBack, 
+        boardSize: this.startSettings.boardSize
       }
-    })
-
-    return arr;
+    }
   }
 
   openCard = (idx) => {
@@ -143,25 +126,55 @@ export default class Game extends Component {
     });
   }
 
-  applySettings = (backSide, cardType) => {
-    this.setState({
-        cardBack: `./images/card-back-${backSide}.png`
+  chooseCardBack = (value) => {
+    this.setState(({ choosenSettings }) => {
+      const newSettings = {
+        ...choosenSettings,
+        cardBack: value
+      };
+
+      return {
+        choosenSettings: newSettings
       }
-    )
+    })
+  }
+
+  chooseBoardSize = (value) => {
+    this.setState(({ choosenSettings }) => {
+      const newSettings = {
+        ...choosenSettings,
+        boardSize: value
+      };
+
+      return {
+        choosenSettings: newSettings
+      }
+    })
+  } 
+
+  applySettings = () => {
+
+    this.setState(({ choosenSettings, isSettingsOpen }) => {
+      return {
+        isSettingsOpen: !isSettingsOpen,
+        savedSettings: {...choosenSettings}
+      }
+    });
+    
+    setTimeout(this.startGame, 0);
   }
 
   toggleSettings = () => {
-    this.setState(({ isSettingsOpen }) => {
-      const temp = isSettingsOpen;
-
+    this.setState(({ savedSettings, isSettingsOpen }) => {
       return {
-        isSettingsOpen: !temp
+        isSettingsOpen: !isSettingsOpen,
+        choosenSettings: {...savedSettings}
       }
     });
   }
 
   startGame = () => {
-    const {data} = this.state;
+    const { data, savedSettings } = this.state;
     const openedCard = data.findIndex(({isOpened}) => isOpened);
     
     if (openedCard > -1) {
@@ -170,15 +183,15 @@ export default class Game extends Component {
         movesCounter: 0,
         clickCounter: 0
       });
-      setTimeout(() => this.closeCards(), 0);
+      setTimeout(this.closeCards, 0);
 
       setTimeout(() => {
           this.setState({
-            data: this.shuffleArr(this.createData())
+            data: shuffleArr(createData(savedSettings.boardSize))
           });
       }, 1000);
       
-      setTimeout(() => this.showCards(), 2000);
+      setTimeout(this.showCards, 2000);
       setTimeout(() => {
         this.closeCards()
         this.setState({isGameStart: true})
@@ -191,16 +204,16 @@ export default class Game extends Component {
       isWin: false,
       movesCounter: 0,
       clickCounter: 0,
-      data: this.shuffleArr(this.createData())
+      data: shuffleArr(createData(savedSettings.boardSize))
     });
-    setTimeout(() => this.showCards(), 0);
+    setTimeout(this.showCards, 0);
     setTimeout(() => {
       this.closeCards()
       this.setState({isGameStart: true})
     }, 3000);
   }
 
-  showCards() {
+  showCards = () => {
     this.setState(({ data }) => {
       const newData = data.map((card) => {
         return {
@@ -215,7 +228,7 @@ export default class Game extends Component {
     })
   }
 
-  closeCards() {
+  closeCards = () => {
     this.setState(({ data }) => {
       const newData = data.map((card) => {
         return {
@@ -231,8 +244,10 @@ export default class Game extends Component {
   }
 
   render() {
-    const { data, movesCounter, isWin, cardBack, isSettingsOpen } = this.state;
-    const isOverlayOpen = isSettingsOpen;
+    
+    const { data, movesCounter, isWin, isSettingsOpen, choosenSettings, savedSettings } = this.state;
+
+    const cardBackImage = `./images/card-back-${savedSettings.cardBack}.png`
 
     return (
       <div className="game">
@@ -243,12 +258,15 @@ export default class Game extends Component {
           <Board data={data}
                  isWin={isWin}
                  openCard={this.openCard}
-                 cardBack={cardBack}/>
+                 cardBack={cardBackImage}/>
           <Settings isSettingsOpen={isSettingsOpen}
-                    applySettings={this.applySettings}/>
+                    applySettings={this.applySettings}
+                    choosenSettings={choosenSettings}
+                    chooseCardBack={this.chooseCardBack}
+                    chooseBoardSize={this.chooseBoardSize}/>
         </main>
         <Footer />
-        <Overlay isOverlayOpen={isOverlayOpen}
+        <Overlay isOverlayOpen={isSettingsOpen}
                  toggleSettings={this.toggleSettings}/>
       </div>
     )
