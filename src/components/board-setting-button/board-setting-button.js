@@ -8,7 +8,7 @@ const BoardSettingButton = ({ value, activeBoardSize, onChooseBoard }) => {
   return (
     <button className={`board-setting-button ${clazz}`}
             type="button"
-            onClick={() => onChooseBoard(value)}>
+            onClick={() => onChooseBoard(value, 'boardSize')}>
       {value}
     </button>
   );

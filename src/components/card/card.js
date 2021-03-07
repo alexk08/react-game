@@ -11,13 +11,6 @@ export default class Card extends Component {
     openCard(id);
   }
 
-  // createImage(src) {
-  //   const image = new Image();
-  //   image.src = src;
-
-  //   return image;
-  // }
-
   render() {
     const { text, isOpened, id, imageSrc, cardBack } = this.props;
 

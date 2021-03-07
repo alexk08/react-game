@@ -37,7 +37,6 @@
 }
 
 .card__face--back  {
-  background-color: red;
   transform: rotateY(180deg);
   display: flex;
   justify-content: center;

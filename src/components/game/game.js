@@ -5,37 +5,38 @@ import Footer from '../footer';
 import Settings from '../settings';
 import Overlay from '../overlay';
 
+import './game.css';
+
+import moveSound from './sounds/move-sound.mp3';
+
 import shuffleArr from './methods/shuffleArr';
 import createData from './methods/createData';
-
-import './game.css';
 
 export default class Game extends Component {
   constructor() {
     super();
     this.startBoardSize = 18;
-    this.startSettings = {cardBack: 'red', boardSize: 18}
+    this.startSettings = {cardBack: 'red', boardSize: 18, cardType: 'pictures'}
     
     this.state = {
-      data: shuffleArr(createData(this.startSettings.boardSize)),
+      data: shuffleArr(createData(this.startSettings.boardSize, this.startSettings.cardType)),
       clickCounter: 0,
       movesCounter: 0,
       isWin: false,
       isSettingsOpen: false,
       isGameStart: false,
       choosenSettings: {
-        cardBack: this.startSettings.cardBack, 
-        boardSize: this.startSettings.boardSize
+        ...this.startSettings
       },
       savedSettings: {
-        cardBack: this.startSettings.cardBack, 
-        boardSize: this.startSettings.boardSize
+        ...this.startSettings
       }
     }
   }
 
   openCard = (idx) => {
     const { isGameStart } = this.state;
+    const audio = new Audio(moveSound);
 
     if (!isGameStart) return;
 
@@ -51,8 +52,11 @@ export default class Game extends Component {
       const openedCard = data.find(({isOpened, isGuessed}) => 
                          isOpened && !isGuessed);
       
+      audio.play();
+
       if (!openedCard) {
         clickedCard.isOpened = true;
+
         return {
           data,
           clickCounter: ++clickCounter
@@ -126,31 +130,16 @@ export default class Game extends Component {
     });
   }
 
-  chooseCardBack = (value) => {
+  chooseSetting = (value, setting) => {
     this.setState(({ choosenSettings }) => {
-      const newSettings = {
-        ...choosenSettings,
-        cardBack: value
-      };
+
+      choosenSettings[setting] = value;
 
       return {
-        choosenSettings: newSettings
+        choosenSettings
       }
     })
   }
-
-  chooseBoardSize = (value) => {
-    this.setState(({ choosenSettings }) => {
-      const newSettings = {
-        ...choosenSettings,
-        boardSize: value
-      };
-
-      return {
-        choosenSettings: newSettings
-      }
-    })
-  } 
 
   applySettings = () => {
 
@@ -187,7 +176,7 @@ export default class Game extends Component {
 
       setTimeout(() => {
           this.setState({
-            data: shuffleArr(createData(savedSettings.boardSize))
+            data: shuffleArr(createData(savedSettings.boardSize, savedSettings.cardType))
           });
       }, 1000);
       
@@ -204,7 +193,7 @@ export default class Game extends Component {
       isWin: false,
       movesCounter: 0,
       clickCounter: 0,
-      data: shuffleArr(createData(savedSettings.boardSize))
+      data: shuffleArr(createData(savedSettings.boardSize, savedSettings.cardType))
     });
     setTimeout(this.showCards, 0);
     setTimeout(() => {
@@ -262,8 +251,7 @@ export default class Game extends Component {
           <Settings isSettingsOpen={isSettingsOpen}
                     applySettings={this.applySettings}
                     choosenSettings={choosenSettings}
-                    chooseCardBack={this.chooseCardBack}
-                    chooseBoardSize={this.chooseBoardSize}/>
+                    chooseSetting={this.chooseSetting}/>
         </main>
         <Footer />
         <Overlay isOverlayOpen={isSettingsOpen}

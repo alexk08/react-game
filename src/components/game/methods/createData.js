@@ -1,4 +1,4 @@
-const createData = (boardSize) => {
+const createData = (boardSize, cardType) => {
   let arr = [];
   let maxId = 100;
   const a = boardSize/2;
@@ -10,7 +10,7 @@ const createData = (boardSize) => {
       isGuessed: false,
       isNotGuessed: false,
       pause: false,
-      imageSrc: `./images/${i + 1}.jpg`
+      imageSrc: `./images/${cardType}/${i + 1}.${cardType === 'cards' ? 'png' : 'jpg'}`
     };
     arr = [ ...arr, el, el]; 
   }

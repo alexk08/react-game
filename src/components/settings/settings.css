@@ -11,8 +11,20 @@
 
   border-radius: 15px;
   background-color: #fff;
+
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.settings__card-back,
+.settings__board,
+.settings__card-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .settings--show {
-  display: block;
+  display: flex;
 }

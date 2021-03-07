@@ -9,7 +9,7 @@ const CardBackButton = ({name, imgSrc, onChooseCardBack, activeBack }) => {
             type="button">
         <img width="40" height="60" 
              src={imgSrc} alt={`${name}-back`}
-             onClick={() => onChooseCardBack(name)}/>
+             onClick={() => onChooseCardBack(name, 'cardBack')}/>
     </button>
   )
 }
