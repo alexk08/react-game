@@ -4,14 +4,22 @@ import './header.css';
 import { ReactComponent as Settings } from './images/settings.svg';
 import { ReactComponent as Statistics } from './images/statistics.svg';
 
-const Header = ({movesCounter, toggleSettings, startGame}) => {
-  const onSettingsButtonCLick = ({target}) => {
+const Header = ({movesCounter, toggleSettings, startGame, toggleStatistic}) => {
+  const onSettingsButtonCLick = ({ target }) => {
     
     if(!target.closest('.settings-button')) {
       return
     }
 
     toggleSettings();
+  }
+
+  const onStatisticOpen = ({ target }) => {
+    if(!target.closest('.statistics-button')) {
+      return
+    }
+
+    toggleStatistic();
   }
 
   const onStartGameClick = () => {
@@ -36,7 +44,8 @@ const Header = ({movesCounter, toggleSettings, startGame}) => {
                 onClick={onSettingsButtonCLick}>
           <Settings/>
         </button>
-        <button type="button" className="statistics-button">
+        <button type="button" className="statistics-button"
+                onClick={onStatisticOpen}>
           <Statistics />
         </button>
       </div>

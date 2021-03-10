@@ -1,11 +1,12 @@
 import React from 'react';
 import './overlay.css';
 
-const Overlay = ({isOverlayOpen, toggleSettings}) => {
-  const clazz = isOverlayOpen ? 'overlay--show' : '';
+const Overlay = ({ isOverlayOpen, toggleSettings, toggleStatistic, isStatisticOpen, isSettingsOpen }) => {
+  const clazz = isOverlayOpen || isStatisticOpen ? 'overlay--show' : '';
 
   const onOverlayClick = () => {
-    toggleSettings();
+    if (isSettingsOpen) toggleSettings();
+    if (isStatisticOpen) toggleStatistic();
   }
   
   return (
