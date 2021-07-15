@@ -1,0 +1,30 @@
+.settings {
+  display: none;
+  width: 600px;
+  height: 400px;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+
+  border-radius: 15px;
+  background-color: #fff;
+
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.settings__card-back,
+.settings__board,
+.settings__card-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings--show {
+  display: flex;
+}

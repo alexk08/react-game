@@ -1,0 +1,7 @@
+.card-back-button {
+  margin: 5px;
+}
+
+.card-back-button--active{
+  transform: scale(1.2);
+}

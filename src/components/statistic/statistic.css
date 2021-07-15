@@ -1,0 +1,43 @@
+.statistic {
+  display: none;
+  width: 600px;
+  height: 400px;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+
+  border-radius: 15px;
+  background-color: #fff;
+
+  flex-direction: column;
+  align-items: center;
+}
+
+.statistic h2 {
+  margin: 20px;
+}
+
+.statistic__list {
+  width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.statistic__item,
+.statistic__item-title {
+  width: 100%;
+  margin: 5px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.statistic--show {
+  display: flex;
+}

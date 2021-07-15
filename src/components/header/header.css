@@ -1,0 +1,37 @@
+.header {
+  min-height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+
+}
+
+.header h1 {
+  margin-left: auto;
+}
+
+.buttons {
+  margin-left: auto;
+  display: flex;
+}
+
+.statistics-button, 
+.settings-button {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  
+
+.statistics-button svg {
+  width: 30px;
+  height: 30px;
+}
+
+.settings-button svg {
+  width: 30px;
+  height: 30px;
+}

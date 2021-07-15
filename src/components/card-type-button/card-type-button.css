@@ -1,0 +1,7 @@
+.card-type-button {
+  margin: 5px;
+}
+
+.card-type-button--active{
+  transform: scale(1.2);
+}
